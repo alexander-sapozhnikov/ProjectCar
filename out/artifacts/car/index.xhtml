@@ -8,7 +8,11 @@
 <h:head></h:head>
 <h:body>
     <h1>ИнфоБюро CaR</h1>
-    <h:dataTable value="#{information.listCar}" var="o">
+    <h:dataTable id = "tableCar" value="#{information.listCar}" var="o">
+        <h:column>
+            <f:facet name="header">Name car</f:facet>
+            #{o.person}
+        </h:column>
         <h:column>
             <f:facet name="header">Name car</f:facet>
             #{o.name}
@@ -29,6 +33,32 @@
             <f:facet name="header">Count step KPP</f:facet>
             #{o.count_step}
         </h:column>
+        <h:column>
+            <f:facet name="header">Delete car</f:facet>
+            <h:commandButton action="#{information.deleteCar(o)}" value = "Delete">
+                <f:ajax render = "tableCar" />
+            </h:commandButton>
+        </h:column>
     </h:dataTable>
+    <h:outputText id = "test" value="#{information.name}"></h:outputText>
+    <h:form>
+        <h:inputText id = "inputName" value = "#{car.name}"></h:inputText>
+        <h:selectOneMenu id = "InputEng" value="#{car.eng_name}">
+            <f:selectItems value="#{information.listEng}" var="c"
+                           itemLabel="#{c.name}" itemValue="#{c.index}" />
+        </h:selectOneMenu>
+        <h:selectOneMenu id = "InputKpp" value="#{car.kpp_name}">
+            <f:selectItems value="#{information.listKpp}" var="c"
+                           itemLabel="#{c.name}" itemValue="#{c.index}" />
+        </h:selectOneMenu>
+        <h:selectOneMenu id = "InputPerson" value="#{car.person}">
+            <f:selectItems value="#{information.listPerson}" var="c"
+                           itemLabel="#{c.name}" itemValue="#{c.index}" />
+        </h:selectOneMenu>
+        <h:commandButton action="#{information.addNewCar(car)}" value = "Send">
+            <f:ajax execute = "inputName InputEng InputKpp InputPerson" render = "tableCar" />
+        </h:commandButton>
+    </h:form>
+
 </h:body>
 </html>

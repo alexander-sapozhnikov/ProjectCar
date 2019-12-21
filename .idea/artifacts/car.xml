@@ -6,13 +6,13 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="Example" />
-          <element id="module-output" name="ProjectCar" />
+          <element id="module-output" name="ProjectCar2" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: postgresql:postgresql:9.1-901-1.jdbc4" />
         </element>
       </element>
-      <element id="javaee-facet-resources" facet="ProjectCar/web/Web" />
+      <element id="javaee-facet-resources" facet="ProjectCar2/web/Web" />
     </root>
   </artifact>
 </component>
