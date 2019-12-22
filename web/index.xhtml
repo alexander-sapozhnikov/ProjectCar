@@ -35,12 +35,19 @@
         </h:column>
         <h:column>
             <f:facet name="header">Delete car</f:facet>
-            <h:commandButton action="#{information.deleteCar(o)}" value = "Delete">
-                <f:ajax render = "tableCar" />
-            </h:commandButton>
+            <h:form>
+                <h:commandButton value="Delete"
+                                 action="#{information.deleteCar()}">
+                    <f:setPropertyActionListener
+                            target="#{information.delCar}"
+                            value="#{o}"/>
+                </h:commandButton>
+            </h:form>
         </h:column>
     </h:dataTable>
-    <h:outputText id = "test" value="#{information.name}"></h:outputText>
+
+
+    <h:outputText id = "test" value="#{information.delCar.name}"></h:outputText>
     <h:form>
         <h:inputText id = "inputName" value = "#{car.name}"></h:inputText>
         <h:selectOneMenu id = "InputEng" value="#{car.eng_name}">

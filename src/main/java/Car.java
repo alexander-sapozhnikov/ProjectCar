@@ -13,6 +13,8 @@ public class Car {
     private String kpp_name = "";
     private String person = "";
     private Integer count_step = 4;
+    private int id_car;
+    private int id_person;
 
     public String getName() {
         return name;
@@ -60,5 +62,21 @@ public class Car {
 
     public void setPerson(String person) {
         this.person = person;
+    }
+
+    public int getId_person() {
+        return id_person;
+    }
+
+    public void setId_person(int id_person) {
+        this.id_person = id_person;
+    }
+
+    public int getId_car() {
+        return id_car;
+    }
+
+    public void setId_car(int id_car) {
+        this.id_car = id_car;
     }
 }

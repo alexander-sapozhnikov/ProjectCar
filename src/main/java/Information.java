@@ -19,7 +19,7 @@ public class Information {
     private List<Capsule> listPerson = new ArrayList<Capsule>();
     private List<Capsule> listEng = new ArrayList<Capsule>();
     private List<Capsule> listKpp = new ArrayList<Capsule>();
-    private String name = "sa";
+    private Car delCar;
 
 
     public Information(){
@@ -30,12 +30,16 @@ public class Information {
     }
 
     public void addNewCar(Car car){
-        listCar.add(DB.assembleCar(car));
-        DB.addNewCar(car);
+        //addNewCar - Добавляет новую машину в базу изменяет и устанавливает id person и car
+        //assembleCar - Оставшиеся поля изменяет в нужный вид
+        listCar.add(DB.assembleCar(DB.addNewCar(car)));
     }
 
-    public void deleteCar(Car car){
-        name = car.getName();
+    public void deleteCar(){
+        DB.deleteCar(delCar);
+        listCar.remove(delCar);
+        delCar.setName("111"+delCar.getId_car());
+        delCar = null;
     }
     private void UPDInfromation(){
         listCar.clear();
@@ -43,7 +47,9 @@ public class Information {
         try {
             while(rs.next()) {
                 Car car = new Car();
+                car.setId_person(rs.getInt("id_person"));
                 car.setPerson(rs.getString("person"));
+                car.setId_car(rs.getInt("id_car"));
                 car.setName(rs.getString("name"));
                 car.setEng_name(rs.getString("eng_name"));
                 car.setPower(rs.getString("power"));
@@ -123,11 +129,12 @@ public class Information {
         this.listKpp = listKpp;
     }
 
-    public String getName() {
-        return name;
+
+    public Car getDelCar() {
+        return delCar;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDelCar(Car delCar) {
+        this.delCar = delCar;
     }
 }

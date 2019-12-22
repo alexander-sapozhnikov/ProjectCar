@@ -26,7 +26,8 @@ public class DataBase {
         ResultSet rs = null;
         try {
             pst = conn.prepareStatement(
-                    "SELECT p.name person, c.name as name, e.name as eng_name, power, k.name as kpp_name, count_step\n" +
+                    "SELECT p.name person, p.id id_person, c.name as name, c.id as id_car," +
+                            " e.name as eng_name, power, k.name as kpp_name, count_step\n" +
                             "FROM car c\n" +
                             "    LEFT JOIN engine e on c.ib_engine = e.id\n" +
                             "    LEFT JOIN  kpp k on c.id_kpp = k.id\n" +
@@ -52,8 +53,7 @@ public class DataBase {
         return rs;
     }
 
-    public void addNewCar(Car car){
-
+    public Car addNewCar(Car car){
         try {
             //Work with table car
             conn.prepareStatement(
@@ -65,11 +65,33 @@ public class DataBase {
             ResultSet rs = conn.prepareStatement("SELECT * FROM car ORDER  BY id DESC LIMIT 1").executeQuery();
             rs.next();
             int id_car = rs.getInt("id");
+            car.setId_car(id_car);
 
             conn.prepareStatement(
                     "INSERT INTO car_person VALUES(" +
                             id_car + ", " +
                             car.getPerson() + ")").executeUpdate();
+            car.setId_person(Integer.parseInt(car.getPerson()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return car;
+    }
+
+    public void deleteCar(Car car){
+        PreparedStatement pst = null;
+        try {
+            pst = conn.prepareStatement(
+                    "DELETE FROM car_person WHERE id_car = ? AND id_person = ?");
+            pst.setInt(1, car.getId_car());
+            pst.setInt(2, car.getId_person());
+            pst.executeUpdate();
+
+            pst = conn.prepareStatement(
+                    "DELETE FROM car WHERE id = ?");
+            pst.setInt(1, car.getId_car());
+            pst.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -102,6 +124,7 @@ public class DataBase {
             rs = pst.executeQuery();
             rs.next();
             readyCar.setPerson(rs.getString("name"));
+            readyCar.setId_person(rs.getInt("id"));
 
             rs.close();
             pst.close();
