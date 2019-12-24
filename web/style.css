@@ -8,7 +8,23 @@
     padding: 10px;
 }
 
+
+
 .table td {
     border: 1px solid black;
 
+}
+
+.table tbody tr:nth-child(2n+1) {
+    border: 1px solid black;
+    background-color: #c8c89b;
+}
+
+.table tbody tr:nth-child(2n) {
+    border: 1px solid black;
+    background-color: #e0e0a8;
+}
+
+.table thead th {
+    background-color: #898960;
 }
