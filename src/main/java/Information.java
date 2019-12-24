@@ -4,6 +4,10 @@ import javax.faces.bean.ManagedBean;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * Основной класс обрабатывающий все действия со страницы
+ * и заполняет её
+ */
 @ManagedBean
 public class Information {
 
@@ -35,6 +39,7 @@ public class Information {
         listCar.remove(delCar);
     }
 
+    //Обновление информации в таблице
     public void UPDInfromation(){
         listCar.clear();
         ResultSet rs = DB.getAll(sort, order);
@@ -56,6 +61,7 @@ public class Information {
         }
     }
 
+    //Получаем информацию для выпадающенго списка при добавление авто
     private void getInfoPersonEngKpp(){
         //Add information in list
         ResultSet rs = DB.getSmt("person");
@@ -92,6 +98,11 @@ public class Information {
 
     }
 
+
+
+
+
+    //Дальше идут служебны функции для jsf
     public List<Car> getListCar() {
         return listCar;
     }

@@ -1,6 +1,12 @@
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 
+/**
+ * Вспомогательный класс для удобства работы
+ * с данными person, kpp, engine
+ *
+ */
+
 @ManagedBean
 public class Capsule {
 

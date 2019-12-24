@@ -3,6 +3,11 @@ import javax.faces.bean.ManagedBean;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 
+/**
+ * Вспомогательный класс для работы с данными о машине
+ */
+
+
 @ManagedBean
 public class Car {
 

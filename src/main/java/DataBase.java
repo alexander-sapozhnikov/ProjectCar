@@ -21,8 +21,10 @@ public class DataBase {
             e.printStackTrace();
         }
         //Проверяем все таблицы есть, еслти нет то создаем
+        checkExistsTables();
     }
 
+    //Собирает с бд всю информацию для основной таблицы
     public ResultSet getAll(char sort, String order){
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -58,6 +60,7 @@ public class DataBase {
         return rs;
     }
 
+    //Получает информацию о person, engine, kpp
     public ResultSet getSmt(String base){
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -71,6 +74,7 @@ public class DataBase {
         return rs;
     }
 
+    //Добавление новой машины в таблицу
     public Car addNewCar(Car car){
         try {
             //Work with table car
@@ -96,6 +100,7 @@ public class DataBase {
         return car;
     }
 
+    //Удаление машины из таблицы
     public void deleteCar(Car car){
         try {
             PreparedStatement pst = conn.prepareStatement(
@@ -115,6 +120,9 @@ public class DataBase {
         }
     }
 
+    //Мы получаем имя машины и индексы на другие таблицы
+    //в итоге получаем информацию по индексам из других таблиц
+    //и отправляем обратно
     public Car assembleCar(Car car){
         Car readyCar = new Car();
         readyCar.setName(car.getName());
@@ -152,6 +160,8 @@ public class DataBase {
         return readyCar;
     }
 
+    //Проверяем что все нужные таблицы сущестует
+    //В противном создаем и заполняем некоторые
     private void checkExistsTables(){
         try {
             DatabaseMetaData metaData = conn.getMetaData();
