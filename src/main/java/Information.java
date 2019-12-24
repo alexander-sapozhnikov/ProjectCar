@@ -1,14 +1,8 @@
-import com.sun.javafx.util.Logging;
-import javafx.scene.chart.PieChart;
-import sun.rmi.runtime.Log;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import java.sql.*;
 import java.util.*;
-import java.util.logging.Logger;
-
-import static java.lang.Math.max;
 
 @ManagedBean
 public class Information {
@@ -19,7 +13,8 @@ public class Information {
     private List<Capsule> listPerson = new ArrayList<Capsule>();
     private List<Capsule> listEng = new ArrayList<Capsule>();
     private List<Capsule> listKpp = new ArrayList<Capsule>();
-    private Car delCar;
+    private char sort = 'D';
+    private String order = " ASC";
 
 
     public Information(){
@@ -35,15 +30,14 @@ public class Information {
         listCar.add(DB.assembleCar(DB.addNewCar(car)));
     }
 
-    public void deleteCar(){
+    public void deleteCar(Car delCar){
         DB.deleteCar(delCar);
         listCar.remove(delCar);
-        delCar.setName("111"+delCar.getId_car());
-        delCar = null;
     }
-    private void UPDInfromation(){
+
+    public void UPDInfromation(){
         listCar.clear();
-        ResultSet rs = DB.getAll();
+        ResultSet rs = DB.getAll(sort, order);
         try {
             while(rs.next()) {
                 Car car = new Car();
@@ -61,6 +55,7 @@ public class Information {
             e.printStackTrace();
         }
     }
+
     private void getInfoPersonEngKpp(){
         //Add information in list
         ResultSet rs = DB.getSmt("person");
@@ -129,12 +124,19 @@ public class Information {
         this.listKpp = listKpp;
     }
 
-
-    public Car getDelCar() {
-        return delCar;
+    public char getSort() {
+        return sort;
     }
 
-    public void setDelCar(Car delCar) {
-        this.delCar = delCar;
+    public void setSort(char sort) {
+        this.sort = sort;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
     }
 }

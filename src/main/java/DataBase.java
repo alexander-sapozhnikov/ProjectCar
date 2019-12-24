@@ -14,17 +14,26 @@ public class DataBase {
         try {
             Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection(url, userDB, passwordDB);
+            checkExistsTables();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        //Проверяем все таблицы есть, еслти нет то создаем
     }
 
-    public ResultSet getAll(){
+    public ResultSet getAll(char sort, String order){
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
+            String sortString = "c.id";
+            switch (sort){
+                case 'E' : sortString = "e.name";
+                    break;
+                case 'K' :  sortString = "k.name";
+                    break;
+            }
             pst = conn.prepareStatement(
                     "SELECT p.name person, p.id id_person, c.name as name, c.id as id_car," +
                             " e.name as eng_name, power, k.name as kpp_name, count_step\n" +
@@ -32,7 +41,16 @@ public class DataBase {
                             "    LEFT JOIN engine e on c.ib_engine = e.id\n" +
                             "    LEFT JOIN  kpp k on c.id_kpp = k.id\n" +
                             "    RIGHT JOIN car_person cp on cp.id_car = c.id\n" +
-                            "    LEFT JOIN person p on cp.id_person = p.id;");
+                            "    LEFT JOIN person p on cp.id_person = p.id ORDER  BY " +
+                            sortString + order);
+            /*switch (sort){
+                case 'E' : pst.setString(1, "e.name");
+                break;
+                case 'K' : pst.setString(1, "k.name");
+                break;
+                default: pst.setString(1, "c.id");
+            }*/
+
             rs  = pst.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,9 +97,8 @@ public class DataBase {
     }
 
     public void deleteCar(Car car){
-        PreparedStatement pst = null;
         try {
-            pst = conn.prepareStatement(
+            PreparedStatement pst = conn.prepareStatement(
                     "DELETE FROM car_person WHERE id_car = ? AND id_person = ?");
             pst.setInt(1, car.getId_car());
             pst.setInt(2, car.getId_person());
@@ -91,6 +108,7 @@ public class DataBase {
                     "DELETE FROM car WHERE id = ?");
             pst.setInt(1, car.getId_car());
             pst.executeUpdate();
+            pst.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -132,5 +150,93 @@ public class DataBase {
             e.printStackTrace();
         }
         return readyCar;
+    }
+
+    private void checkExistsTables(){
+        try {
+            DatabaseMetaData metaData = conn.getMetaData();
+            //Person
+            ResultSet have = metaData.getTables(null, null, "person", null);
+            if (!have.next()) {
+                conn.prepareStatement("CREATE TABLE person (\n" +
+                        "id SERIAL PRIMARY KEY,\n" +
+                        "name VARCHAR(60)\n" +
+                        ")").execute();
+
+                PreparedStatement pst = conn.prepareStatement("INSERT into  person  values (default, ?)");
+                pst.setString(1, "Вася");
+                pst.execute();
+                pst.setString(1, "Жася");
+                pst.execute();
+                pst.setString(1, "Муся");
+                pst.execute();
+                pst.setString(1, "Леша");
+                pst.execute();
+            }
+            //Engine
+            have = metaData.getTables(null, null, "engine", null);
+            if (!have.next()) {
+                conn.prepareStatement("CREATE TABLE engine (\n" +
+                        " id SERIAL PRIMARY KEY,\n" +
+                        " name VARCHAR(70) not null,\n" +
+                        " power VARCHAR(60))").execute();
+                PreparedStatement pst = conn.prepareStatement("INSERT into  engine  values (default, ?, ?)");
+                pst.setString(1, "21081");
+                pst.setString(2, "1.1");
+                pst.execute();
+                pst.setString(1, "H854125");
+                pst.setString(2, "2.3");
+                pst.execute();
+                pst.setString(1, "456999");
+                pst.setString(2, "8.9");
+                pst.execute();
+                pst.setString(1, "M891");
+                pst.setString(2, "0.5");
+                pst.execute();
+            }
+            //Kpp
+            have = metaData.getTables(null, null, "kpp", null);
+            if (!have.next()) {
+                conn.prepareStatement("CREATE TABLE kpp (\n" +
+                        "id SERIAL PRIMARY KEY,\n" +
+                        "name VARCHAR(70) not null,\n" +
+                        "count_step INT)").execute();
+                PreparedStatement pst = conn.prepareStatement("INSERT into  kpp  values (default, ?, ?)");
+                pst.setString(1, "JH3 540");
+                pst.setInt(2, 7);
+                pst.execute();
+                pst.setString(1, "TRE 999");
+                pst.setInt(2, 5);
+                pst.execute();
+                pst.setString(1, "JH3 879");
+                pst.setInt(2, 6);
+                pst.execute();
+                pst.setString(1, "PSW 208");
+                pst.setInt(2, 5);
+                pst.execute();
+            }
+            //Car
+            have = metaData.getTables(null, null, "car", null);
+            if (!have.next()) {
+                conn.prepareStatement("CREATE TABLE car (   \n" +
+                        "id SERIAL PRIMARY KEY,\n" +
+                        "name VARCHAR(60) not null,\n" +
+                        "ib_engine INT,\n" +
+                        "id_kpp INT,\n" +
+                        "foreign key(ib_engine) references engine(id),\n" +
+                        "foreign key (id_kpp) references kpp(id))").execute();
+            }
+            //Car_person
+            have = metaData.getTables(null, null, "car_person", null);
+            if (!have.next()){
+                conn.prepareStatement("CREATE TABLE car_person (\n" +
+                        "id_car INT,\n" +
+                        "id_person INT,\n" +
+                        "PRIMARY KEY (id_car, id_person))").execute();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }
