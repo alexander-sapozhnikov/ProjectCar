@@ -1,0 +1,10 @@
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping">
+    <class name="Hibernate.kpp" table="person">
+        <id column="engine_id" name="id" type="java.lang.Integer">
+            <generator class="increment"/>
+        </id>
+
+        <property name="name" column="name_kpp" type="java.lang.String"/>
+        <property name="count_step" column="count_step" type="java.lang.String"/>
+    </class>
+</hibernate-mapping>

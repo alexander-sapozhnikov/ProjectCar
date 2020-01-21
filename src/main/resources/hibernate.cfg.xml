@@ -1,0 +1,14 @@
+<hibernate-configuration xmlns="http://www.hibernate.org/xsd/hibernate-configuration">
+    <session-factory>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/neo</property>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password"/>
+
+        <mapping resource="car.hbm.xml"/>
+        <mapping resource="engine.hbm.xml"/>
+        <mapping resource="kpp.hbm.xml"/>
+        <mapping resource="person.hbm.xml"/>
+
+    </session-factory>
+</hibernate-configuration>

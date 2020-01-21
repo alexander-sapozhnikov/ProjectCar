@@ -1,0 +1,9 @@
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping">
+    <class name="Hibernate.person" table="person">
+        <id column="person_id" name="id" type="java.lang.Integer">
+            <generator class="increment"/>
+        </id>
+
+        <property name="name" column="name_person" type="java.lang.String"/>
+    </class>
+</hibernate-mapping>

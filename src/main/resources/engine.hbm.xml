@@ -1,0 +1,10 @@
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping">
+    <class name="Hibernate.engine" table="engine">
+        <id column="engine_id" name="id" type="java.lang.Integer">
+            <generator class="increment"/>
+        </id>
+        
+        <property name="name" column="name_engine" type="java.lang.String"/>
+        <property name="power" column="power" type="java.lang.String"/>
+    </class>
+</hibernate-mapping>
